@@ -46,6 +46,7 @@ export async function POST(req: Request) {
   }).catch(() => null);
 
   if (!upstream?.ok || !upstream.body) {
+    console.error("DeepSeek", upstream?.status, await upstream?.text().catch(() => ""));
     return Response.json({ error: "L'IA est momentanément indisponible. Réessaie dans un instant." }, { status: 502 });
   }
 

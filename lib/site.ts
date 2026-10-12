@@ -4,7 +4,7 @@ export const site = {
   name: "Kelly",
   role: "Créateur de sites web et de vidéos publicitaires",
   roleTail: "outils d'intelligence artificielle",
-  url: "https://kelly-portfolio.vercel.app",
+  url: "https://kelly-portfolio-gamma.vercel.app",
   github: "https://github.com/kellygaming",
 
   // Film d'ouverture (rendu avec /motionbykelly). Tant qu'il vaut null, le hero joue
