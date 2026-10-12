@@ -18,4 +18,4 @@ test("bloque les en-têtes injectés et les types de projet hors liste", () => {
   assert.equal(validateContact({ ...valid, projet: "Valeur inventée" }).kind, "invalid");
 });
 test("le pot de miel ne produit pas une demande à envoyer", () => { assert.equal(validateContact({ website: "spam.example" }).kind, "spam"); });
-test("le HTML fourni par un visiteur reste du texte dans l’e-mail", () => { assert.equal(escapeHtml('<script>"x" & \'y\'</script>'), "&lt;script&gt;&quot;x&quot; & &#39;y&#39;&lt;/script&gt;"); });
+test("le HTML fourni par un visiteur reste du texte dans l’e-mail", () => { assert.equal(escapeHtml('<script>"x" & \'y\'</script>'), "&lt;script&gt;&quot;x&quot; &amp; &#39;y&#39;&lt;/script&gt;"); });
