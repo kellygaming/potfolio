@@ -1,0 +1,5 @@
+import { ImageResponse } from "next/og";
+export const alt = "Kelly — Créateur de sites web avec l’IA. Afrique francophone & international.";
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
+export default function Image() { return new ImageResponse(<div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", padding: "64px 76px", background: "#fafafa", color: "#191919", fontFamily: "sans-serif" }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 28 }}><span style={{ fontSize: 42, fontWeight: 700 }}>kelly.</span><span>Création web & IA</span></div><div style={{ display: "flex", flexDirection: "column", fontSize: 88, lineHeight: 1.06, fontWeight: 700, letterSpacing: -4, marginTop: 72 }}><span>De votre idée</span><span>à votre site web.</span></div><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto", fontSize: 25 }}><span>Afrique francophone & international</span><span style={{ background: "#ff5a1f", padding: "18px 26px", borderRadius: 6 }}>Parlons de votre projet</span></div></div>, size); }

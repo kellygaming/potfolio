@@ -1,35 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Instrument_Serif, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
-
-const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display", weight: ["500", "600", "700"] });
-const body = Inter({ subsets: ["latin"], variable: "--font-body" });
-const serif = Instrument_Serif({ subsets: ["latin"], variable: "--font-serif", weight: "400", style: ["italic"] });
-
-const description = `${site.name} — ${site.role}, ${site.roleTail}. Sites web, vidéos publicitaires IA, montage et motion design.`;
-
+const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display", weight: ["500", "600", "700"], display: "swap" });
+const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const title = "Kelly — Créateur de sites web avec l’IA";
+const description = "Sites vitrines, boutiques en ligne et applications web avec Kelly. Création assistée par l’IA pour l’Afrique francophone et l’international. Découvrez les réalisations et parlons de votre projet.";
 export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: `${site.name} — ${site.role} · IA`,
-  description,
-  openGraph: {
-    title: `${site.name} — l'intelligence artificielle, maîtrisée`,
-    description,
-    type: "website",
-    locale: "fr_FR",
-  },
+  metadataBase: new URL(site.url), title, description,
+  alternates: { canonical: "/" },
+  openGraph: { title, description, url: site.url, siteName: "Kelly — Création web & IA", type: "website", locale: "fr_FR" },
+  twitter: { card: "summary_large_image", title, description },
 };
-
-export const viewport: Viewport = { themeColor: "#05060a", width: "device-width", initialScale: 1 };
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="fr" className={`${display.variable} ${body.variable} ${serif.variable}`} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
-      </head>
-      <body>{children}</body>
-    </html>
-  );
-}
+export const viewport: Viewport = { themeColor: "#fafafa", width: "device-width", initialScale: 1 };
+export default function RootLayout({ children }: { children: React.ReactNode }) { return <html lang="fr" className={display.variable + " " + body.variable}><body>{children}</body></html>; }

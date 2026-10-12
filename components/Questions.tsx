@@ -1,0 +1,2 @@
+import { questions } from "@/lib/site";
+export default function Questions() { return <section className="questions section" aria-labelledby="questions-title"><div className="wrap question-grid"><div><p className="eyebrow">Avant de commencer</p><h2 id="questions-title">Quelques réponses<br />pour y voir clair.</h2></div><div>{questions.map(q => <details key={q.question}><summary>{q.question}<span className="question-plus" aria-hidden="true">+</span></summary><p>{q.answer}</p></details>)}</div></div></section>; }

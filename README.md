@@ -1,40 +1,35 @@
-# Portfolio de Kelly — l'intelligence artificielle, maîtrisée
+# Kelly — Création web & IA
 
-Créateur de sites web et de vidéos publicitaires — outils d'intelligence artificielle.
+Portfolio en français : sites vitrines, boutiques et applications web pour l’Afrique francophone et l’international.
 
-## Parcours de la page
+## Développement et vérification
 
-1. **Hero** — film « Intelligence artificielle » (voix activable). En attendant le MP4
-   /motionbykelly, une version animée en code (réseau neuronal canvas + GSAP) joue la même phrase.
-2. **« Et je suis l'un des meilleurs »** — section épinglée : la phrase s'allume au défilement,
-   la photo de Kelly se pose, puis les maîtrises (Claude, ChatGPT, vidéo IA, montage).
-3. **L'IA de Kelly** — orbe animé + chat en direct, propulsé par DeepSeek (réponses en streaming).
-4. **Projets** — TubAfrik, Sub Saharan Bio, Studio Voix, avec captures réelles des pages d'accueil.
-5. **Présentation** — « Fan d'IA, je m'en suis inspiré… je suis prêt pour votre projet ».
-6. **Fiche projet** — formulaire envoyé par e-mail (Resend).
+Node.js 24 recommandé (version du projet Vercel).
 
-## Stack
+- `npm ci`
+- `npm run dev`
+- `npm test` : validation du formulaire, corps JSON inattendus, limites, en-têtes et échappement HTML.
+- `npm run typecheck`
+- `npm run build`
 
-Next.js 16 (App Router) · TypeScript · GSAP ScrollTrigger · Lenis · CSS natif (jetons dans `app/globals.css`).
-Contenu centralisé dans `lib/site.ts`.
+Le contenu public est centralisé dans `lib/site.ts`. Les types de projet et la validation sont dans `lib/contact.ts`.
 
-## Démarrer
+## Contact
 
-```bash
-npm install
-cp .env.example .env.local   # DEEPSEEK_API_KEY, RESEND_API_KEY, CONTACT_TO_EMAIL
-npm run dev
-```
+WhatsApp : +225 01 73 50 76 82, confirmé par Kelly pour cette refonte.
 
-## À fournir
+Le formulaire utilise Resend. Copier `.env.example` dans `.env.local` puis définir `RESEND_API_KEY`, `CONTACT_TO_EMAIL` et, idéalement, `CONTACT_FROM_EMAIL` sur un domaine vérifié. La clé et le destinataire restent côté serveur. Si l’envoi échoue, la page propose WhatsApp et ne prétend pas que la demande a été reçue. L’adresse de test Resend ne livre qu’au propriétaire du compte.
 
-| Fichier | Rôle |
-|---|---|
-| `public/images/kelly.jpg` | Portrait (format 4:5, ≥ 900 px de large). Sans lui, un monogramme s'affiche. |
-| `public/audio/hero-voix.mp3` | Voix off du hero (sinon la voix du navigateur prend le relais). |
-| `public/videos/hero.mp4` | Film /motionbykelly (voir `docs/film-hero/SCRIPT.md`). |
+## Page
 
-## Déploiement Vercel
+Services, réalisations vérifiées, méthode, présentation, questions et contact. Les captures et le portrait sont conservés depuis le dépôt existant. Les animations utilisent l’API native du navigateur, sans masquer le contenu avant chargement et avec respect de la réduction des mouvements. Le défilement reste natif.
 
-Importer le dépôt, puis ajouter les variables `DEEPSEEK_API_KEY`, `RESEND_API_KEY`,
-`CONTACT_TO_EMAIL` (et `CONTACT_FROM_EMAIL` une fois un domaine vérifié sur Resend).
+Référencement : métadonnées françaises, URL canonique, image de partage, favicon, sitemap, robots et données structurées Person. Aucune note, certification, statistique commerciale ou identité d’entreprise n’est inventée.
+
+## Traçabilité
+
+- `docs/content-audit.md` : sources et limites des affirmations.
+- `docs/design-direction.md` : direction visuelle et décisions.
+- `docs/verification.md` : vérifications et limites de livraison.
+
+La version précédente utilisait un assistant généraliste et une longue introduction animée. La refonte privilégie la compréhension de l’offre et la prise de contact. Les dépendances historiques GSAP et Lenis restent verrouillées pour éviter une migration inutile, mais ne sont plus importées dans le portfolio.
