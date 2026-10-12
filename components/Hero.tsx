@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { heroFinal, heroLines, heroSpoken, site } from "@/lib/site";
+import { heroFinal, heroLines, heroSignature, heroSpoken, site } from "@/lib/site";
 
 /* ------------------------------------------------------------------ */
 /* Réseau neuronal en fond : des points reliés qui dérivent, puis      */
@@ -249,7 +249,7 @@ export default function Hero() {
     t.to(q(".hero-flash"), { opacity: 0, duration: 0.6, ease: "power2.out" }, at + 0.08);
     t.set(q(".hero-final"), { opacity: 1 }, at);
     t.to(finalWords, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "expo.out", stagger: 0.18 }, at);
-    t.to(q(".hero-sub"), { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, at + 1.1);
+    t.to(q(".hero-sub"), { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, at + 1.8);
     // Respiration lente du titre (couche vivante).
     t.to(q(".hero-final"), { scale: 1.03, duration: 4, ease: "sine.inOut", yoyo: true, repeat: 5 }, at + 0.8);
 
@@ -338,6 +338,7 @@ export default function Hero() {
             ))}
           </h1>
           <p className="hero-sub">
+            <span className="hero-sign">{heroSignature}</span>
             {site.name} — {site.role}, {site.roleTail}.
           </p>
         </div>

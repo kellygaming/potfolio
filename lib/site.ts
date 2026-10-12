@@ -25,7 +25,10 @@ export const heroLines = [
 export const heroFinal = ["INTELLIGENCE", "ARTIFICIELLE"] as const;
 
 export const heroSpoken =
-  "Depuis l'intelligence artificielle, nous touchons aujourd'hui quelque chose d'incroyable... L'intelligence artificielle.";
+  "Depuis l'intelligence artificielle, nous touchons aujourd'hui quelque chose d'incroyable... L'intelligence artificielle. Et moi, je la maîtrise.";
+
+// Signature du film (version B validée par Kelly).
+export const heroSignature = "Et moi, je la maîtrise.";
 
 export const mastery = [
   {

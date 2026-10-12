@@ -350,6 +350,14 @@ select {
   font-size: clamp(15px, 1.6vw, 18px);
   opacity: 0;
 }
+.hero-sign {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(26px, 3vw, 40px);
+  color: var(--ink);
+}
 .hero-controls {
   position: absolute;
   left: 50%;
@@ -436,6 +444,7 @@ select {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 20%;
 }
 .claim-photo .ph {
   position: absolute;
@@ -1076,6 +1085,29 @@ select {
 }
 .contact-intro p {
   color: var(--ink-2);
+}
+.contact-me {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 28px;
+}
+.contact-me img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--ai-2);
+}
+.contact-me b {
+  display: block;
+  font-family: var(--font-display);
+}
+.contact-me span {
+  font-size: 14px;
+  color: var(--ink-3);
 }
 .form {
   display: grid;

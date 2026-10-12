@@ -40,6 +40,14 @@ export default function Contact() {
             Un site web, une vidéo publicitaire réalisée avec l&apos;IA, un montage ? Remplissez la fiche : je la reçois
             directement et je reviens vers vous avec une proposition claire.
           </p>
+          <div className="contact-me">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/kelly-avatar.jpg" alt="Kelly" width={64} height={64} />
+            <div>
+              <b>Kelly</b>
+              <span>Je lis chaque demande personnellement</span>
+            </div>
+          </div>
         </div>
 
         <form className="form" onSubmit={onSubmit} data-reveal="0.1" noValidate={false}>
