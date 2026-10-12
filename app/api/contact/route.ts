@@ -1,3 +1,4 @@
+import { Resend } from "resend";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -49,21 +50,25 @@ export async function POST(req: Request) {
     )
     .join("");
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
-    body: JSON.stringify({
-      from: process.env.CONTACT_FROM_EMAIL || "Portfolio Kelly <onboarding@resend.dev>",
-      to: [to],
-      reply_to: data.email,
-      subject: `Nouveau projet : ${data.projet || "demande"} — ${data.nom}`,
-      html: `<h2 style="font-family:sans-serif">Nouvelle demande depuis le portfolio</h2><table style="font-family:sans-serif;font-size:14px">${rows}</table>`,
-      text: Object.entries(data).map(([k, v]) => `${k}: ${v}`).join("\n"),
-    }),
-  }).catch(() => null);
+  const resend = new Resend(key);
+  const message = {
+    to: [to],
+    replyTo: data.email,
+    subject: `Nouveau projet : ${data.projet || "demande"} — ${data.nom}`,
+    html: `<h2 style="font-family:sans-serif">Nouvelle demande depuis le portfolio</h2><table style="font-family:sans-serif;font-size:14px">${rows}</table>`,
+    text: Object.entries(data).map(([k, v]) => `${k}: ${v}`).join("\n"),
+  };
 
-  if (!res?.ok) {
-    return Response.json({ error: "L'envoi a échoué. Réessayez dans un instant." }, { status: 502 });
+  // Expéditeur du domaine vérifié ; tant que le domaine n'est pas validé, l'adresse de test
+  // de Resend (qui ne livre qu'au propriétaire du compte) prend le relais.
+  const senders = [process.env.CONTACT_FROM_EMAIL, "Portfolio Kelly <onboarding@resend.dev>"].filter(Boolean) as string[];
+  for (const from of senders) {
+    const { data: sent, error } = await resend.emails.send({ ...message, from });
+    if (!error) {
+      console.log("contact: e-mail envoyé", sent?.id, "depuis", from);
+      return Response.json({ ok: true });
+    }
+    console.error("contact: échec Resend", from, error.name, error.message);
   }
-  return Response.json({ ok: true });
+  return Response.json({ error: "L'envoi a échoué. Réessayez dans un instant." }, { status: 502 });
 }
