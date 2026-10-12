@@ -44,3 +44,9 @@ La dernière phrase fait le pont avec la section suivante (« Et je suis l'un de
    immédiatement (bouton « Activer la voix »).
 2. Le film rendu va en `public/videos/hero.mp4` (+ `hero-poster.jpg`), puis dans `lib/site.ts` :
    `heroFilm: { src: "/videos/hero.mp4", poster: "/videos/hero-poster.jpg" }`.
+
+## Prise retenue (version B)
+
+- Voix **Marc Aurèle**, générée via HeyGen (moteur ElevenLabs v4), 9,56 s.
+- `public/audio/hero-voix.mp3` (normalisée -16 LUFS) ; minutage mot par mot dans `lib/site.ts` (`heroCues`).
+- Copie de travail du film : `film-hero-ia/assets/audio/voix.wav` dans l'atelier /motionbykelly.

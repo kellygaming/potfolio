@@ -19,8 +19,20 @@ export const site = {
 export const heroLines = [
   "Depuis l'intelligence artificielle,",
   "nous touchons aujourd'hui",
-  "quelque chose d'incroyable :",
+  "quelque chose d'incroyable.",
 ] as const;
+
+// Minutage mot par mot de la voix (public/audio/hero-voix.mp3), en secondes.
+export const heroCues = {
+  lines: [
+    [0.0, 0.4, 1.08],
+    [2.36, 2.6, 2.88],
+    [3.36, 3.68, 4.16],
+  ],
+  lineOut: [2.15, 3.22, 5.15],
+  final: [5.44, 6.48],
+  signature: 7.76,
+} as const;
 
 export const heroFinal = ["INTELLIGENCE", "ARTIFICIELLE"] as const;
 

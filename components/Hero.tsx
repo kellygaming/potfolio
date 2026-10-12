@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { heroFinal, heroLines, heroSignature, heroSpoken, site } from "@/lib/site";
+import { heroCues, heroFinal, heroLines, heroSignature, heroSpoken, site } from "@/lib/site";
 
 /* ------------------------------------------------------------------ */
 /* Réseau neuronal en fond : des points reliés qui dérivent, puis      */
@@ -210,12 +210,12 @@ export default function Hero() {
   const stopVoice = useRef<() => void>(() => {});
   const [voiceOn, setVoiceOn] = useState(false);
 
-  const build = useCallback(() => {
+  const build = useCallback((delay = 0.4, paused = false) => {
     const el = root.current!;
     tl.current?.kill();
     const q = gsap.utils.selector(el);
     const lines = q(".hero-line");
-    const finalWords = q(".hero-final span");
+    const finalWords = q(".hero-final .ai-text");
     const stage = q(".hero-stage");
 
     gsap.set(lines, { opacity: 0 });
@@ -226,30 +226,33 @@ export default function Hero() {
     gsap.set(q(".hero-flash"), { opacity: 0 });
     gsap.set(stage, { scale: 1 });
 
-    const t = gsap.timeline({ delay: 0.4 });
-    // Poussée de caméra continue sur toute la phrase.
-    t.to(stage, { scale: 1.08, duration: 7.2, ease: "none" }, 0);
+    const t = gsap.timeline({ delay, paused });
+    const lead = 0.06; // chaque mot arrive juste avant d'être prononcé
+    // Poussée de caméra continue jusqu'au titre.
+    t.to(stage, { scale: 1.08, duration: heroCues.final[0], ease: "none" }, 0);
 
-    let at = 0;
     lines.forEach((line, i) => {
       const words = line.querySelectorAll(".w");
-      t.set(line, { opacity: 1 }, at);
-      t.to(words, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.55, ease: "expo.out", stagger: 0.09 }, at);
-      const hold = i === lines.length - 1 ? 1.25 : 1.05;
-      const out = at + 0.55 + words.length * 0.09 + hold;
-      t.to(words, { opacity: 0, y: -30, filter: "blur(10px)", duration: 0.28, ease: "power3.in", stagger: 0.025 }, out);
-      at = out + 0.3;
+      t.set(line, { opacity: 1 }, Math.max(0, heroCues.lines[i][0] - lead));
+      words.forEach((w, k) => {
+        const at = Math.max(0, (heroCues.lines[i][k] ?? heroCues.lines[i].at(-1)!) - lead);
+        t.to(w, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.45, ease: "expo.out" }, at);
+      });
+      t.to(words, { opacity: 0, y: -30, filter: "blur(10px)", duration: 0.2, ease: "power3.in", stagger: 0.02 }, heroCues.lineOut[i]);
     });
 
-    // Aspiration au centre puis explosion → titre.
+    // Aspiration au centre pendant « d'incroyable », puis explosion → titre.
+    const at = heroCues.final[0] - lead;
     t.call(() => neural.current.converge(), [], at - 1.2);
     t.set(stage, { scale: 1 }, at);
     t.to(q(".hero-flash"), { opacity: 0.9, duration: 0.08, ease: "none" }, at);
     t.call(() => neural.current.burst(), [], at + 0.05);
     t.to(q(".hero-flash"), { opacity: 0, duration: 0.6, ease: "power2.out" }, at + 0.08);
     t.set(q(".hero-final"), { opacity: 1 }, at);
-    t.to(finalWords, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "expo.out", stagger: 0.18 }, at);
-    t.to(q(".hero-sub"), { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, at + 1.8);
+    finalWords.forEach((w, k) => {
+      t.to(w, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "expo.out" }, heroCues.final[k] - lead);
+    });
+    t.to(q(".hero-sub"), { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, heroCues.signature - 0.1);
     // Respiration lente du titre (couche vivante).
     t.to(q(".hero-final"), { scale: 1.03, duration: 4, ease: "sine.inOut", yoyo: true, repeat: 5 }, at + 0.8);
 
@@ -278,7 +281,7 @@ export default function Hero() {
       return;
     }
     stopVoice.current();
-    build();
+    build(0, true);
     setVoiceOn(true);
     stopVoice.current = await startVoice();
     tl.current?.play(0);
