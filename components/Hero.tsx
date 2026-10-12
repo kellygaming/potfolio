@@ -50,19 +50,9 @@ function useNeuralCanvas(ref: React.RefObject<HTMLCanvasElement | null>) {
       }));
     };
 
-    const color = (t: number, a: number) => {
-      // dégradé cyan → violet → magenta
-      const stops = [
-        [92, 242, 255],
-        [123, 107, 255],
-        [209, 107, 255],
-      ];
-      const s = t * 2;
-      const i = Math.min(1, Math.floor(s));
-      const f = s - i;
-      const c = stops[i].map((v, k) => Math.round(v + (stops[i + 1][k] - v) * f));
-      return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
-    };
+    // Réseau couleur crème ; un point sur sept brille en braise.
+    const color = (t: number, a: number) =>
+      Math.round(t * 1000) % 7 === 0 ? `rgba(255,91,31,${a})` : `rgba(242,237,228,${a * 0.75})`;
 
     const frame = () => {
       raf = requestAnimationFrame(frame);
@@ -215,7 +205,7 @@ export default function Hero() {
     tl.current?.kill();
     const q = gsap.utils.selector(el);
     const lines = q(".hero-line");
-    const finalWords = q(".hero-final .ai-text");
+    const finalWords = q(".hero-final .hf");
     const stage = q(".hero-stage");
 
     gsap.set(lines, { opacity: 0 });
@@ -318,7 +308,7 @@ export default function Hero() {
       <div
         className="hero-flash"
         aria-hidden
-        style={{ position: "absolute", inset: 0, background: "radial-gradient(circle, #fff, #8f86ff 40%, transparent 75%)", opacity: 0, pointerEvents: "none" }}
+        style={{ position: "absolute", inset: 0, background: "radial-gradient(circle, #fff3e8, #ff5b1f 40%, transparent 75%)", opacity: 0, pointerEvents: "none" }}
       />
 
       {!site.heroFilm && (
@@ -334,8 +324,8 @@ export default function Hero() {
           ))}
           <h1 className="hero-final">
             <span className="sr-only">{heroLines.join(" ")} </span>
-            {heroFinal.map((w) => (
-              <span key={w} className="ai-text shine">
+            {heroFinal.map((w, i) => (
+              <span key={w} className={`hf hf-${i + 1}`}>
                 {w}
               </span>
             ))}

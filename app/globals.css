@@ -4,20 +4,21 @@
    ============================================================ */
 
 :root {
-  --bg: #05060a;
-  --bg-2: #0b0d14;
+  --bg: #0c0b09;
+  --bg-2: #15130f;
   --surface: rgba(255, 255, 255, 0.04);
   --surface-2: rgba(255, 255, 255, 0.07);
   --line: rgba(255, 255, 255, 0.09);
-  --ink: #f4f5f8;
-  --ink-2: #a6abba;
-  --ink-3: #6b7080;
+  --ink: #f2ede4;
+  --ink-2: #aaa397;
+  --ink-3: #6f695f;
 
-  --ai-1: #5cf2ff;
-  --ai-2: #7b6bff;
-  --ai-3: #d16bff;
-  --ai: linear-gradient(100deg, var(--ai-1) 0%, var(--ai-2) 50%, var(--ai-3) 100%);
-  --ai-glow: rgba(123, 107, 255, 0.45);
+  /* Une seule couleur d'accent, pleine : la braise. Pas de dégradé. */
+  --ember: #ff5b1f;
+  --ember-soft: #ff8a5c;
+  --ember-deep: #c63d0c;
+  --ember-glow: rgba(255, 91, 31, 0.35);
+  --ai: var(--ember);
 
   --ok: #3ddc97;
   --err: #ff6b81;
@@ -81,12 +82,12 @@ select {
 }
 
 ::selection {
-  background: var(--ai-2);
+  background: var(--ember);
   color: #fff;
 }
 
 :focus-visible {
-  outline: 2px solid var(--ai-1);
+  outline: 2px solid var(--ember);
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -101,10 +102,7 @@ select {
 }
 
 .ai-text {
-  background: var(--ai);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--ember);
 }
 
 .eyebrow {
@@ -169,13 +167,13 @@ select {
 }
 .btn-primary {
   border: 0;
-  color: #07080d;
-  background: var(--ai);
-  box-shadow: 0 10px 40px -10px var(--ai-glow);
+  color: #120a05;
+  background: var(--ember);
+  box-shadow: 0 10px 40px -10px var(--ember-glow);
 }
 .btn-primary:hover {
-  background: var(--ai);
-  box-shadow: 0 16px 50px -10px var(--ai-glow);
+  background: var(--ember-soft);
+  box-shadow: 0 16px 50px -10px var(--ember-glow);
 }
 .btn svg {
   width: 18px;
@@ -219,7 +217,7 @@ select {
 }
 .nav[data-scrolled="true"] {
   padding-block: 12px;
-  background: rgba(5, 6, 10, 0.72);
+  background: rgba(12, 11, 9, 0.72);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
 }
@@ -238,7 +236,7 @@ select {
   height: 10px;
   border-radius: 50%;
   background: var(--ai);
-  box-shadow: 0 0 16px var(--ai-1);
+  box-shadow: 0 0 14px var(--ember-glow);
 }
 .nav-links {
   display: flex;
@@ -274,7 +272,7 @@ select {
   display: grid;
   place-items: center;
   isolation: isolate;
-  background: radial-gradient(120% 80% at 50% 110%, #12102a 0%, var(--bg) 60%);
+  background: radial-gradient(120% 80% at 50% 115%, #2a150a 0%, var(--bg) 60%);
 }
 .hero-canvas,
 .hero-film {
@@ -293,7 +291,7 @@ select {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(60% 50% at 50% 50%, transparent 0%, rgba(5, 6, 10, 0.75) 100%),
+    radial-gradient(60% 50% at 50% 50%, transparent 0%, rgba(12, 11, 9, 0.75) 100%),
     linear-gradient(to bottom, transparent 70%, var(--bg) 100%);
 }
 .hero-stage {
@@ -331,17 +329,12 @@ select {
 .hero-final span {
   display: block;
 }
-.hero-final .ai-text {
-  filter: drop-shadow(0 0 40px rgba(123, 107, 255, 0.35));
+.hero-final .hf-1 {
+  color: var(--ink);
 }
-.hero-final .shine {
-  background-size: 220% 100%;
-  animation: shine 6s linear infinite;
-}
-@keyframes shine {
-  to {
-    background-position: -220% 0;
-  }
+.hero-final .hf-2 {
+  color: var(--ember);
+  text-shadow: 0 0 60px var(--ember-glow);
 }
 .hero-sub {
   margin: 28px auto 0;
@@ -434,8 +427,8 @@ select {
   border-radius: 28px;
   overflow: hidden;
   background:
-    radial-gradient(80% 60% at 50% 30%, #2a2060, transparent),
-    linear-gradient(160deg, #141432, #07070f);
+    radial-gradient(80% 60% at 50% 30%, #3a1e10, transparent),
+    linear-gradient(160deg, #1c1611, #0a0907);
   box-shadow:
     0 40px 120px -30px rgba(0, 0, 0, 0.9),
     0 0 0 1px var(--line);
@@ -460,7 +453,7 @@ select {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(5, 6, 10, 0.92) 0%, rgba(5, 6, 10, 0.1) 45%, transparent 70%);
+  background: linear-gradient(to top, rgba(12, 11, 9, 0.92) 0%, rgba(12, 11, 9, 0.1) 45%, transparent 70%);
 }
 .claim-id {
   position: absolute;
@@ -526,7 +519,7 @@ select {
   padding: 10px 16px;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: rgba(10, 11, 18, 0.7);
+  background: rgba(16, 14, 12, 0.7);
   backdrop-filter: blur(10px);
   font-size: 14px;
 }
@@ -568,7 +561,7 @@ select {
   position: absolute;
   inset: 10% -20% auto;
   height: 70%;
-  background: radial-gradient(50% 50% at 50% 50%, rgba(123, 107, 255, 0.18), transparent 70%);
+  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 91, 31, 0.1), transparent 70%);
   pointer-events: none;
 }
 .assistant-grid {
@@ -608,19 +601,19 @@ select {
 }
 .orb .halo {
   inset: -30%;
-  background: radial-gradient(circle, var(--ai-glow), transparent 65%);
+  background: radial-gradient(circle, var(--ember-glow), transparent 65%);
   animation: breathe 3.6s ease-in-out infinite;
 }
 .orb .core {
   background:
-    radial-gradient(35% 35% at 35% 30%, rgba(255, 255, 255, 0.95), transparent 70%),
-    conic-gradient(from 0deg, var(--ai-1), var(--ai-2), var(--ai-3), var(--ai-1));
+    radial-gradient(35% 35% at 35% 30%, rgba(255, 240, 225, 0.95), transparent 70%),
+    radial-gradient(circle at 50% 60%, var(--ember-soft), var(--ember) 45%, var(--ember-deep) 100%);
   animation:
     spin 8s linear infinite,
     blob 7s ease-in-out infinite;
   box-shadow:
     inset 0 -10px 30px rgba(0, 0, 0, 0.35),
-    0 0 40px rgba(92, 242, 255, 0.35);
+    0 0 40px var(--ember-glow);
 }
 .orb[data-thinking="true"] .core {
   animation-duration: 1.4s, 2.2s;
@@ -662,7 +655,7 @@ select {
   position: relative;
   border-radius: 28px;
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(20, 21, 34, 0.85), rgba(10, 11, 18, 0.9));
+  background: linear-gradient(180deg, rgba(28, 25, 21, 0.85), rgba(16, 14, 12, 0.9));
   box-shadow: 0 40px 100px -40px rgba(0, 0, 0, 0.9);
   overflow: hidden;
 }
@@ -726,7 +719,8 @@ select {
 }
 .msg-user {
   align-self: flex-end;
-  background: linear-gradient(120deg, #3a2fd0, #6a3fd8);
+  background: var(--ember);
+  color: #120a05;
   border-bottom-right-radius: 6px;
 }
 .msg-err {
@@ -808,7 +802,7 @@ select {
   transition: border-color 0.2s;
 }
 .chat-form textarea:focus {
-  border-color: var(--ai-2);
+  border-color: var(--ember);
 }
 .chat-form .btn {
   --h: 50px;
@@ -1099,7 +1093,7 @@ select {
   object-fit: cover;
   box-shadow:
     0 0 0 2px var(--bg),
-    0 0 0 4px var(--ai-2);
+    0 0 0 4px var(--ember);
 }
 .contact-me b {
   display: block;
@@ -1116,7 +1110,7 @@ select {
   padding: clamp(20px, 3vw, 34px);
   border-radius: 28px;
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(20, 21, 34, 0.7), rgba(10, 11, 18, 0.8));
+  background: linear-gradient(180deg, rgba(28, 25, 21, 0.7), rgba(16, 14, 12, 0.8));
 }
 @media (max-width: 600px) {
   .form {
@@ -1158,7 +1152,7 @@ select {
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
-  border-color: var(--ai-2);
+  border-color: var(--ember);
 }
 fieldset.field {
   border: 0;
@@ -1189,13 +1183,13 @@ fieldset.field {
   transition: all 0.2s;
 }
 .choices input:checked + span {
-  color: #07080d;
-  background: var(--ai);
+  color: #120a05;
+  background: var(--ember);
   border-color: transparent;
   font-weight: 600;
 }
 .choices input:focus-visible + span {
-  outline: 2px solid var(--ai-1);
+  outline: 2px solid var(--ember);
   outline-offset: 2px;
 }
 .hp {

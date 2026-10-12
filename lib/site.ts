@@ -7,39 +7,38 @@ export const site = {
   url: "https://kelly-portfolio-gamma.vercel.app",
   github: "https://github.com/kellygaming",
 
-  // Film d'ouverture (rendu avec /motionbykelly). Tant qu'il vaut null, le hero joue
-  // la version animée en code, sur la même voix et le même texte.
+  // Film d'ouverture optionnel. Null : le hero joue l'animation en code (choix actuel).
   heroFilm: null as null | { src: string; poster: string },
-  // Voix off du hero : déposer le MP3 dans public/audio/. Sans fichier, la voix
-  // du navigateur (fr-FR) prend le relais.
+  // Voix off du hero (la voix de Kelly) : déposer le MP3 dans public/audio/.
+  // Sans fichier, la voix du navigateur (fr-FR) prend le relais.
   heroVoice: "/audio/hero-voix.mp3",
   photo: "/images/kelly.jpg",
 } as const;
 
 export const heroLines = [
-  "Depuis l'intelligence artificielle,",
+  "Depuis la révolution industrielle,",
   "nous touchons aujourd'hui",
   "quelque chose d'incroyable.",
 ] as const;
 
-// Minutage mot par mot de la voix (public/audio/hero-voix.mp3), en secondes.
+// Minutage mot par mot (en secondes). Estimé : à recaler sur la voix de Kelly dès réception.
 export const heroCues = {
   lines: [
-    [0.0, 0.4, 1.08],
-    [2.36, 2.6, 2.88],
-    [3.36, 3.68, 4.16],
+    [0.0, 0.4, 0.6, 1.2],
+    [2.4, 2.65, 2.95],
+    [3.45, 3.75, 4.15],
   ],
-  lineOut: [2.15, 3.22, 5.15],
-  final: [5.44, 6.48],
-  signature: 7.76,
+  lineOut: [2.2, 3.3, 5.2],
+  final: [5.5, 6.5],
+  signature: 7.8,
 } as const;
 
 export const heroFinal = ["INTELLIGENCE", "ARTIFICIELLE"] as const;
 
 export const heroSpoken =
-  "Depuis l'intelligence artificielle, nous touchons aujourd'hui quelque chose d'incroyable... L'intelligence artificielle. Et moi, je la maîtrise.";
+  "Depuis la révolution industrielle, nous touchons aujourd'hui quelque chose d'incroyable... L'intelligence artificielle. Et moi, je la maîtrise.";
 
-// Signature du film (version B validée par Kelly).
+// Signature de l'introduction.
 export const heroSignature = "Et moi, je la maîtrise.";
 
 export const mastery = [
