@@ -14,3 +14,11 @@ Aucun message de test réel n’est envoyé à Kelly. La livraison Resend dépen
 Les réalisations externes sont vérifiées sur leur page publique et dans le code. Leurs paiements, comptes, stockage, traitements audio et services externes ne sont pas testés de bout en bout dans le cadre de cette refonte.
 
 L’exécution du terminal local a été refusée par Windows (erreur antivirus 225). Les contrôles de compilation et les tests sont donc exécutés dans le build Vercel du commit de la branche de refonte.
+
+## Résultats confirmés
+
+Commit cf499034 : 6 tests réussis, TypeScript strict réussi et build Next.js réussi sur Vercel (déploiement dpl_3pzCat1XugkjDoTq4FQQW84zpV2F).
+
+Navigateur : rendus contrôlés à 1440, 768, 390 et 360 px, sans débordement horizontal. Les 7 images se chargent après défilement. Menu mobile, fermeture au choix d’une section, FAQ et ancres contrôlés. Le navigateur bloque un e-mail invalide et un message manquant sans envoyer de demande. Tous les liens WhatsApp pointent vers le numéro confirmé.
+
+Derniers ajustements : suppression du double espacement des ancres et retour du focus au bouton de menu après Échap.
