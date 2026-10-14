@@ -1,4 +1,5 @@
 import About from "@/components/About";
+import AdShowcase from "@/components/AdShowcase";
 import Assistant from "@/components/Assistant";
 import Claim from "@/components/Claim";
 import Contact from "@/components/Contact";
@@ -19,6 +20,7 @@ export default function Home() {
         <Claim />
         <Assistant />
         <Projects />
+        <AdShowcase />
         <About />
         <Contact />
       </main>

@@ -21,6 +21,7 @@ export default function Nav() {
         <a href="#kelly">Kelly</a>
         <a href="#ia">Mon IA</a>
         <a href="#projets">Projets</a>
+        <a href="#video">Vidéo</a>
         <a href="#apropos">À propos</a>
       </nav>
       <a href="#contact" className="btn btn-primary">

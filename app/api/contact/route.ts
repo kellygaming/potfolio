@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { projectAlert, sendTelegram, telegramReady } from "@/lib/telegram";
 
 export const runtime = "nodejs";
 
@@ -36,10 +37,19 @@ export async function POST(req: Request) {
     return Response.json({ error: "Merci d'indiquer votre nom, un e-mail valide et quelques mots sur votre projet." }, { status: 400 });
   }
 
+  // Canal principal : Telegram (comme koratopup.com). L'e-mail Resend reste un second canal optionnel.
   const key = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL;
-  if (!key || !to) {
+  const mailReady = Boolean(key && to);
+  if (!telegramReady() && !mailReady) {
     return Response.json({ error: "Le formulaire n'est pas encore branché. Réessayez bientôt." }, { status: 503 });
+  }
+
+  const telegramOk = await sendTelegram(projectAlert(data));
+  if (!mailReady) {
+    return telegramOk
+      ? Response.json({ ok: true })
+      : Response.json({ error: "L'envoi a échoué. Réessayez dans un instant." }, { status: 502 });
   }
 
   const rows = Object.entries(data)
@@ -50,9 +60,9 @@ export async function POST(req: Request) {
     )
     .join("");
 
-  const resend = new Resend(key);
+  const resend = new Resend(key!);
   const message = {
-    to: [to],
+    to: [to!],
     replyTo: data.email,
     subject: `Nouveau projet : ${data.projet || "demande"} — ${data.nom}`,
     html: `<h2 style="font-family:sans-serif">Nouvelle demande depuis le portfolio</h2><table style="font-family:sans-serif;font-size:14px">${rows}</table>`,
@@ -70,5 +80,6 @@ export async function POST(req: Request) {
     }
     console.error("contact: échec Resend", from, error.name, error.message);
   }
+  if (telegramOk) return Response.json({ ok: true });
   return Response.json({ error: "L'envoi a échoué. Réessayez dans un instant." }, { status: 502 });
 }

@@ -1041,6 +1041,78 @@ select {
   padding: 0 20px;
 }
 
+/* ---------- 4 bis. vidéo publicitaire ---------- */
+
+.ad {
+  padding: clamp(60px, 10vh, 120px) 0;
+}
+.ad-player {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow:
+    0 50px 120px -40px rgba(0, 0, 0, 0.9),
+    0 0 0 8px rgba(255, 255, 255, 0.025),
+    0 30px 120px -60px var(--accent-glow);
+}
+.ad-player video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ad-sound {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(16px, 4%, 32px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.ad-sound:hover {
+  transform: translateX(-50%) translateY(-2px);
+}
+.ad-details {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0 0;
+}
+@media (max-width: 760px) {
+  .ad-details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ad-player {
+    border-radius: 18px;
+  }
+  .ad-sound {
+    --h: 34px;
+    bottom: 8px;
+    font-size: 12px;
+    padding: 0 12px;
+  }
+}
+.ad-details div {
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.ad-details dt {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+.ad-details dd {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
 /* ---------- 5. présentation ---------- */
 
 .about {
