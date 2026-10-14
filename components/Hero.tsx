@@ -50,9 +50,9 @@ function useNeuralCanvas(ref: React.RefObject<HTMLCanvasElement | null>) {
       }));
     };
 
-    // Réseau couleur crème ; un point sur sept brille en braise.
+    // Réseau blanc froid ; un point sur sept brille en bleu.
     const color = (t: number, a: number) =>
-      Math.round(t * 1000) % 7 === 0 ? `rgba(255,91,31,${a})` : `rgba(242,237,228,${a * 0.75})`;
+      Math.round(t * 1000) % 7 === 0 ? `rgba(110,150,255,${a})` : `rgba(226,233,247,${a * 0.7})`;
 
     const frame = () => {
       raf = requestAnimationFrame(frame);
@@ -308,7 +308,7 @@ export default function Hero() {
       <div
         className="hero-flash"
         aria-hidden
-        style={{ position: "absolute", inset: 0, background: "radial-gradient(circle, #fff3e8, #ff5b1f 40%, transparent 75%)", opacity: 0, pointerEvents: "none" }}
+        style={{ position: "absolute", inset: 0, background: "radial-gradient(circle, #f2f6ff, #4d7cff 40%, transparent 75%)", opacity: 0, pointerEvents: "none" }}
       />
 
       {!site.heroFilm && (

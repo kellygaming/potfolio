@@ -4,34 +4,20 @@ import { useEffect, useRef, useState } from "react";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const GREETING =
-  "Salut toi 👋 Pose-moi n'importe quelle question par écrit, je te réponds. J'ai été créé par Kelly.";
+const SUGGESTIONS = ["Que sait faire Kelly ?", "C'est quoi une pub vidéo IA ?", "Combien de temps pour un site ?"];
 
-const SUGGESTIONS = [
-  "Que sait faire Kelly ?",
-  "Peux-tu m'expliquer une vidéo pub IA ?",
-  "Combien de temps pour un site ?",
-];
-
-function Orb({ thinking = false }: { thinking?: boolean }) {
-  return (
-    <span className="orb" data-thinking={thinking} aria-hidden>
-      <span className="halo" />
-      <span className="core" />
-    </span>
-  );
-}
-
+/** Assistant IA plein écran : un grand cadre, « Bonjour utilisateur », la conversation au centre, la saisie en bas. */
 export default function Assistant() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const log = useRef<HTMLDivElement>(null);
+  const field = useRef<HTMLInputElement>(null);
   const abort = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    log.current?.scrollTo({ top: log.current.scrollHeight });
+    log.current?.scrollTo({ top: log.current.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
 
   useEffect(() => () => abort.current?.abort(), []);
@@ -73,106 +59,88 @@ export default function Assistant() {
       setError((e as Error).message);
     } finally {
       setBusy(false);
+      field.current?.focus({ preventScroll: true });
     }
   };
 
-  const onKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      send(input);
-    }
-  };
-
+  const started = messages.length > 0;
   const last = messages.at(-1);
   const waiting = busy && last?.role === "assistant" && !last.content;
 
   return (
     <section className="assistant" id="ia" aria-labelledby="ia-title">
-      <div className="wrap assistant-grid">
-        <div className="assistant-intro" data-reveal>
-          <span className="eyebrow">Assistant IA · DeepSeek</span>
-          <h2 className="section-title" id="ia-title">
-            Parle à <em className="ai-text">mon IA</em>.
-          </h2>
-          <p>
-            Un assistant que j&apos;ai conçu et branché sur DeepSeek. Il répond à tes questions en direct, sur
-            l&apos;IA, le web, la vidéo… ou sur mon travail.
-          </p>
-          <div className="orb-wrap">
-            <Orb thinking={busy} />
-            <div className="bubble">{GREETING}</div>
-          </div>
-        </div>
+      <div className="ia-frame" data-started={started}>
+        <span className="ia-by" aria-hidden>
+          By Kelly
+        </span>
+        <span className="ia-status" aria-hidden>
+          <i data-busy={busy} /> {busy ? "réfléchit…" : "en ligne · DeepSeek"}
+        </span>
 
-        <div className="chat" data-reveal="0.15">
-          <div className="chat-head">
-            <Orb thinking={busy} />
-            <div>
-              <b>IA de Kelly</b>
-              <small>Propulsée par DeepSeek</small>
-            </div>
-            <span className="live">
-              <i /> en ligne
-            </span>
-          </div>
+        <header className="ia-hello">
+          <h2 id="ia-title">Bonjour utilisateur</h2>
+          <p>J&apos;ai été créé par Kelly.</p>
+          <p>Pose-moi tes questions.</p>
+        </header>
 
-          <div className="chat-log" ref={log} aria-live="polite" data-lenis-prevent>
-            <div className="msg msg-ai">{GREETING}</div>
-            {messages.map((m, i) =>
-              m.role === "assistant" && !m.content ? null : (
-                <div key={i} className={`msg ${m.role === "user" ? "msg-user" : "msg-ai"}`}>
-                  {m.content}
-                </div>
-              ),
-            )}
-            {waiting && (
-              <div className="msg msg-ai" aria-label="L'IA écrit">
-                <span className="typing">
-                  <i />
-                  <i />
-                  <i />
-                </span>
+        <div className="ia-log" ref={log} aria-live="polite">
+          {messages.map((m, i) =>
+            m.role === "assistant" && !m.content ? null : (
+              <div key={i} className={`ia-msg ia-${m.role}`}>
+                <span className="ia-who">{m.role === "user" ? "Toi" : "IA de Kelly"}</span>
+                <p>{m.content}</p>
               </div>
-            )}
-            {error && <div className="msg msg-err">{error}</div>}
-          </div>
-
-          {messages.length === 0 && (
-            <div className="chat-suggest">
-              {SUGGESTIONS.map((s) => (
-                <button key={s} type="button" onClick={() => send(s)}>
-                  {s}
-                </button>
-              ))}
+            ),
+          )}
+          {waiting && (
+            <div className="ia-msg ia-assistant" aria-label="L'IA écrit">
+              <span className="ia-who">IA de Kelly</span>
+              <span className="typing">
+                <i />
+                <i />
+                <i />
+              </span>
             </div>
           )}
-
-          <form
-            className="chat-form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              send(input);
-            }}
-          >
-            <label htmlFor="chat-input" className="sr-only">
-              Ta question
-            </label>
-            <textarea
-              id="chat-input"
-              rows={1}
-              maxLength={1200}
-              placeholder="Écris ta question ici…"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={onKey}
-            />
-            <button className="btn btn-primary" type="submit" disabled={busy || !input.trim()} aria-label="Envoyer">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden>
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </button>
-          </form>
+          {error && <p className="ia-err">{error}</p>}
         </div>
+
+        {!started && (
+          <div className="ia-suggest">
+            {SUGGESTIONS.map((s) => (
+              <button key={s} type="button" onClick={() => send(s)}>
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <form
+          className="ia-input"
+          onSubmit={(e) => {
+            e.preventDefault();
+            send(input);
+          }}
+        >
+          <label htmlFor="ia-field" className="sr-only">
+            Ta question
+          </label>
+          <span className="ia-caret" aria-hidden />
+          <input
+            id="ia-field"
+            ref={field}
+            autoComplete="off"
+            maxLength={1200}
+            placeholder="Écris ta question ici…"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <button type="submit" disabled={busy || !input.trim()} aria-label="Envoyer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </button>
+        </form>
       </div>
     </section>
   );

@@ -25,7 +25,7 @@ export default function Projects() {
         </div>
 
         {projects.map((p, i) => (
-          <article className="project" key={p.slug} style={{ ["--accent" as string]: p.accent }}>
+          <article className="project" key={p.slug} style={{ ["--brand" as string]: p.accent }}>
             <div className="project-media" data-reveal>
               {p.shot.kind === "desktop" ? (
                 <>
