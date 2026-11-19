@@ -8,8 +8,8 @@ Direction artistique inspirée du template **Crimson Reach** (MIT, Kedhareswer N
 1. **Hero épinglé** — au défilement, la main humaine et la main robot se rapprochent jusqu'à se frôler ; une étincelle s'allume entre les index (`handsFrame` dans `lib/motion.ts`).
 2. **Manifeste** — s'encre mot à mot ; dessous, **les noms des 4 projets phares défilent** (cliquables).
 3. **« Où en est votre projet ? »** — la dune se découpe en trois cartes qui se retournent.
-4. **Services** — Sites web, Applications IA, Vidéos publicitaires IA, Montage & motion design.
-5. **Projets phares** — grand titre qui rétrécit sur le carrousel (Desby & Fils, Delta Sécurité, FFMF, Motion.ai).
+4. **Avis clients** — cartes qui glissent (auto toutes les 6,5 s, flèches, points). Données : `testimonials` dans `lib/site.ts`.
+5. **Projets phares** — grand titre qui rétrécit sur le carrousel (Desby & Fils, Delta Sécurité, FFMF, Motion.ai, Aura Brand).
 6. **Mur d'outils IA** — Claude, ChatGPT, fal.ai, ElevenLabs…
 7. **Mon IA** — assistant DeepSeek en streaming (`/api/chat`).
 8. **Contact** — cartes, compteurs, fiche projet (`/api/contact` → Telegram, puis e-mail Resend).
@@ -30,6 +30,12 @@ Crimson Reach (licence MIT, Kedhareswer Naidu).
 
 Tout est dans `lib/site.ts` : textes, services, projets, outils, compteurs, prompt de l'assistant.
 
+## Témoignages
+
+Dans `lib/site.ts`, chaque entrée de `testimonials` porte `pending: true` tant que le vrai avis n'est pas reçu :
+la carte affiche alors « Le témoignage de ce client arrive très bientôt » (aucun faux avis).
+Pour publier un avis : remplir `quote` (sans guillemets), ajuster `role`, mettre une photo carrée dans `image`, puis retirer `pending`.
+
 ## Images des projets
 
 Déposer une capture par projet (16:9, ≥ 1200 px, l'en-tête du site en haut) :
@@ -40,6 +46,7 @@ Déposer une capture par projet (16:9, ≥ 1200 px, l'en-tête du site en haut) 
 | `public/projets/delta-securite.webp` | Delta Sécurité |
 | `public/projets/ffmf.webp` | FFMF |
 | `public/projets/motion-ai.webp` | Motion.ai |
+| `public/projets/aura.webp` | Aura Brand |
 
 `.jpg` et `.png` marchent aussi. Sans fichier, une carte typographique rouge s'affiche — aucune ligne de code à toucher.
 

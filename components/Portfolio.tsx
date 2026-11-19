@@ -3,14 +3,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent, ReactNode } from "react";
 import { clamp, countAt, easeOut, featuredFrame, handsFrame, journeyFrame, loopOffset, mix, seg, wordLevel } from "@/lib/motion";
-import { hero, journey, manifesto, services, site, stats, tools, type Project } from "@/lib/site";
+import { hero, journey, manifesto, site, stats, testimonials, tools, type Project } from "@/lib/site";
 import AskAI from "./AskAI";
 import ProjectForm from "./ProjectForm";
+import Testimonials from "./Testimonials";
 
 /*
  * Portfolio Kelly — direction artistique « Crimson Reach » (template MIT de Kedhareswer Naidu), réécrit en français.
  * Une main humaine et une main de machine se tendent sur une carte rouge ; le manifeste s'encre mot à mot ;
- * la dune se découpe en trois cartes ; services ; « Projets phares » qui rétrécit sur le carrousel ;
+ * la dune se découpe en trois cartes ; avis clients ; « Projets phares » qui rétrécit sur le carrousel ;
  * mur d'outils IA ; l'IA de Kelly ; contact + fiche projet ; carte finale.
  * Une seule boucle rAF par défilement écrit les transformations directement dans le DOM.
  */
@@ -273,11 +274,11 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
             {site.brand}
           </a>
           <div className="links">
-            <a href="#services" onClick={go("services")}>
-              <Roll>Services</Roll>
-            </a>
             <a href="#projets" onClick={go("projets")}>
               <Roll>Projets</Roll>
+            </a>
+            <a href="#avis" onClick={go("avis")}>
+              <Roll>Avis</Roll>
             </a>
             <a href="#ia" onClick={go("ia")}>
               <Roll>Mon IA</Roll>
@@ -399,37 +400,8 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
         </div>
       </section>
 
-      {/* services */}
-      <section className="services" id="services">
-        <header className="head">
-          <h2 className="h2 h2-lg">
-            <em>Mes</em> services
-          </h2>
-          <p>L&apos;IA comme moteur, l&apos;œil humain comme garantie</p>
-        </header>
-        <div className="rows">
-          {services.map((s, i) => (
-            <article key={s.id} className="row">
-              <div className="row-title">
-                <span>({String(i + 1).padStart(2, "0")})</span>
-                <h3>{s.title}</h3>
-              </div>
-              <ul>
-                {s.items.map((t) => (
-                  <li key={t}>{t}</li>
-                ))}
-              </ul>
-              <div className="row-img">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={s.image} alt={s.title.replace("\n", " ")} loading="lazy" width={762} height={506} />
-              </div>
-            </article>
-          ))}
-        </div>
-        <a className="btn vision" href="#contact" onClick={go("contact")}>
-          <Roll>Construisons votre projet</Roll>
-        </a>
-      </section>
+      {/* avis clients (à la place des services) */}
+      <Testimonials items={testimonials} />
 
       {/* projets phares */}
       <section className="feat" id="projets">
@@ -603,8 +575,8 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
               &copy; {new Date().getFullYear()} {site.name} · Tous droits réservés
             </span>
             <span className="flinks">
-              <a href="#services" onClick={go("services")}>
-                Services
+              <a href="#avis" onClick={go("avis")}>
+                Avis clients
               </a>
               <a href="#projets" onClick={go("projets")}>
                 Projets

@@ -139,10 +139,16 @@ export const projects: Project[] = [
   {
     slug: "ffmf",
     name: "FFMF",
-    title: "FFMF — description à venir",
-    body: "Projet phare : la présentation détaillée arrive très bientôt.",
-    tags: ["Projet phare"],
+    title: "Plateforme de la communauté Free Fire MEA",
+    body: "Le site officiel de la communauté francophone Free Fire MEA : tournois, guildes, vendeurs certifiés, actualités et streamers, réunis en une seule application.",
+    tags: ["Plateforme communautaire", "Tournois", "Application"],
     repo: "https://github.com/HQGP/FFMF",
+    points: [
+      "Événements officiels avec inscriptions des guildes (Guildes Cup CS 2026 : 32 guildes inscrites)",
+      "Résultats en direct, historique des événements et création de tournois",
+      "Vendeurs certifiés, actualités de la communauté, streamers MENA et application téléchargeable",
+    ],
+    stack: ["Application web", "Espace admin", "Assistant IA"],
   },
   {
     slug: "motion-ai",
@@ -160,6 +166,41 @@ export const projects: Project[] = [
     stack: ["Next.js", "fal.ai", "MiniMax", "Supabase"],
     ai: "La génération passe par le modèle vidéo MiniMax sur fal.ai, en file d'attente : on lance, on suit l'avancée, on récupère la vidéo.",
   },
+  {
+    slug: "aura",
+    name: "Aura Brand",
+    title: "Boutique en ligne d'une marque de streetwear",
+    body: "Une vitrine sombre et éditoriale pour la nouvelle collection « Man of God » : boutique, collection, matière, avis et commande directe.",
+    tags: ["E-commerce", "Marque de mode", "Direction artistique"],
+    points: [
+      "Hero plein écran sur le produit phare, typographie de marque",
+      "Parcours boutique, collection, matière, avis clients et commande",
+    ],
+  },
+];
+
+export type Testimonial = {
+  id: string;
+  /** nom du client ou de l'entreprise */
+  name: string;
+  /** rôle + projet, ex. « Gérant, Desby & Fils » */
+  role: string;
+  /** le témoignage, sans guillemets */
+  quote: string;
+  /** photo du client (carrée) ou, à défaut, la capture de son projet */
+  image: string;
+  /** grand mot en filigrane en bas de carte (par défaut : le nom) */
+  mark?: string;
+  /** true tant que le vrai témoignage n'est pas reçu : la carte l'annonce sans inventer de texte */
+  pending?: boolean;
+};
+
+// ★ Remplacer chaque `pending: true` par le vrai témoignage (quote) dès réception.
+export const testimonials: Testimonial[] = [
+  { id: "desby", name: "Desby & Fils", role: "Client · Site vitrine BTP", quote: "", image: "/projets/desby-fils.webp", mark: "DESBY", pending: true },
+  { id: "ffmf", name: "Free Fire MEA", role: "Client · Plateforme communautaire", quote: "", image: "/projets/ffmf.webp", mark: "FFMF", pending: true },
+  { id: "aura", name: "Aura Brand", role: "Client · Boutique streetwear", quote: "", image: "/projets/aura.webp", mark: "AURA", pending: true },
+  { id: "delta", name: "Delta Sécurité", role: "Client · Site corporate", quote: "", image: "/crimson/svc-web.webp", mark: "DELTA", pending: true },
 ];
 
 export const stats = [
