@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent, ReactNode } from "react";
-import { clamp, countAt, easeOut, featuredFrame, journeyFrame, loopOffset, mix, seg, wordLevel } from "@/lib/motion";
+import { clamp, countAt, easeOut, featuredFrame, handsFrame, journeyFrame, loopOffset, mix, seg, wordLevel } from "@/lib/motion";
 import { hero, journey, manifesto, services, site, stats, tools, type Project } from "@/lib/site";
 import AskAI from "./AskAI";
 import ProjectForm from "./ProjectForm";
@@ -15,7 +15,14 @@ import ProjectForm from "./ProjectForm";
  * Une seule boucle rAF par défilement écrit les transformations directement dans le DOM.
  */
 
-const LOGO_STYLES = ["lg-serif", "lg-caps", "lg-mono", "lg-bold", "lg-script", "lg-wide", "lg-thin"];
+/** une section n'est recalculée que si elle touche l'écran (marge d'un demi-écran) : moins de travail par image */
+const rectVisible = (el: HTMLElement | null, vh: number) => {
+  if (!el) return false;
+  const r = el.getBoundingClientRect();
+  return r.bottom > -vh * 0.5 && r.top < vh * 1.5;
+};
+
+const LOGO_STYLES =["lg-serif", "lg-caps", "lg-mono", "lg-bold", "lg-script", "lg-wide", "lg-thin"];
 
 function Roll({ children }: { children: ReactNode }) {
   return (
@@ -109,6 +116,18 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
     return () => window.clearInterval(t);
   }, []);
 
+  // les animations CSS en boucle (marquee) se mettent en pause hors de l'écran
+  useEffect(() => {
+    const els = rootRef.current?.querySelectorAll<HTMLElement>(".marquee") ?? [];
+    if (!("IntersectionObserver" in window)) {
+      els.forEach((el) => el.classList.add("is-live"));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle("is-live", e.isIntersecting)));
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   // la chorégraphie : une seule passe rAF par événement de défilement
   useEffect(() => {
     const root = rootRef.current;
@@ -118,7 +137,10 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
     const $$ = (s: string) => Array.from(root.querySelectorAll<HTMLElement>(s));
     const nav = $(".nav"),
       heroEl = $(".hero"),
-      hands = $$(".hand"),
+      heroCard = $(".hero-card"),
+      handHuman = $(".hand-human"),
+      handAi = $(".hand-ai"),
+      spark = $(".spark"),
       manifestoEl = $(".manifesto"),
       wordEls = $$(".mword"),
       journeyEl = $(".journey"),
@@ -141,21 +163,31 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
       const vh = window.innerHeight;
       const vw = root.clientWidth;
       const rootTop = root.getBoundingClientRect().top;
+      // le hero est épinglé : son avancée (0 → 1) pilote le rapprochement des mains
+      const heroRun = heroEl ? heroEl.offsetHeight - vh : 0;
+      const heroP = heroRun > 0 ? clamp(-rootTop / heroRun) : 1;
       if (nav && heroEl) {
-        const pill = -rootTop > heroEl.offsetHeight * 0.72;
+        const pill = -rootTop > heroRun + vh * 0.28;
         nav.classList.toggle("is-pill", pill);
-        nav.style.marginTop = pill ? "0px" : Math.min(0, rootTop) + "px";
+        nav.style.marginTop = pill ? "0px" : Math.min(0, rootTop + heroRun) + "px";
       }
-      if (heroEl && !reduced) {
-        const s = clamp(-rootTop / heroEl.offsetHeight);
-        hands.forEach((h, i) => (h.style.translate = `${(i ? 1 : -1) * 40 * s}px ${(i ? 1 : -1) * 60 * s}px`));
+      if (heroCard && handHuman && handAi && rectVisible(heroEl, vh)) {
+        const f = handsFrame(heroP, heroCard.clientWidth, heroCard.clientHeight, reduced);
+        handHuman.style.width = handAi.style.width = f.hw + "px";
+        handHuman.style.transform = `translate3d(${f.human.x}px,${f.human.y}px,0)`;
+        handAi.style.transform = `translate3d(${f.ai.x}px,${f.ai.y}px,0)`;
+        if (spark) {
+          spark.style.transform = `translate3d(${f.M.x}px,${f.M.y}px,0) translate(-50%,-50%) scale(${0.4 + f.spark * 0.8})`;
+          spark.style.opacity = String(f.spark);
+        }
+        heroCard.classList.toggle("is-touch", heroP > 0.97);
       }
-      if (manifestoEl) {
+      if (manifestoEl && rectVisible(manifestoEl, vh)) {
         const r = manifestoEl.getBoundingClientRect();
         const rev = reduced ? 1 : clamp((vh * 0.25 - r.top) / (r.height - vh * 0.6));
         wordEls.forEach((w, i) => (w.style.opacity = String(0.26 + 0.74 * wordLevel(i, wordEls.length, rev))));
       }
-      if (journeyEl) {
+      if (journeyEl && rectVisible(journeyEl, vh)) {
         const r = journeyEl.getBoundingClientRect();
         const p = -r.top / (r.height - vh);
         const f = journeyFrame(p, vw, vh, reduced);
@@ -175,7 +207,7 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
           }
         });
       }
-      if (feat && ftitle && fcar) {
+      if (feat && ftitle && fcar && rectVisible(feat, vh)) {
         const r = feat.getBoundingClientRect();
         const p = -r.top / (r.height - vh);
         const f = featuredFrame(p, vw < 760 ? 1.6 : 3.1, reduced);
@@ -195,13 +227,14 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
           contact.classList.toggle("is-in", p > 0.35);
         }
       }
-      if (cta && ctaImg && ctaText) {
+      if (cta && ctaImg && ctaText && rectVisible(cta, vh)) {
         const r = cta.getBoundingClientRect();
         const p = reduced ? 1 : easeOut(clamp((vh - r.top) / (vh * 0.85)));
         cta.style.transform = `scale(${mix(0.9, 1, p)})`;
         cta.style.borderRadius = mix(40, 16, p) + "px";
         ctaImg.style.transform = `scale(${mix(1.18, 1, p)})`;
-        ctaText.style.filter = `blur(${mix(14, 0, seg(p, 0.35, 1))}px)`;
+        // plus de flou CSS (coûteux à chaque image) : un glissement + fondu suffit
+        ctaText.style.transform = `translateY(calc(-50% + ${mix(28, 0, seg(p, 0.3, 1))}px))`;
         ctaText.style.opacity = String(mix(0, 1, seg(p, 0.3, 0.9)));
       }
     };
@@ -258,16 +291,18 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
 
       {/* hero */}
       <section className="hero" id="top">
+        <div className="hero-pin">
         <div className="hero-card">
           <div className="hero-art">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="hero-plate" src="/crimson/hero.webp" alt="" width={1536} height={1024} fetchPriority="high" />
+            <img className="hero-plate" src="/crimson/hero.webp" alt="" width={2000} height={1342} fetchPriority="high" />
             <span className="hero-glow" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="hand hand-top" src="/crimson/hand-top.webp" alt="" width={500} height={400} />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="hand hand-bottom" src="/crimson/hand-bottom.webp" alt="" width={516} height={444} />
           </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="hand hand-human" src="/crimson/hand-human.webp" alt="" width={1200} height={1011} fetchPriority="high" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="hand hand-ai" src="/crimson/hand-ai.webp" alt="" width={1200} height={1039} fetchPriority="high" />
+          <span className="spark" aria-hidden="true" />
           <div className="hero-copy">
             <h1>
               {hero.lines.map((line, l) => (
@@ -287,11 +322,12 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
           <div className="hero-foot">
             <span suppressHydrationWarning>{clock || " "}</span>
             <span className="explore" aria-hidden="true">
-              <span>Défilez pour découvrir</span>
-              <span>Défilez pour découvrir</span>
+              <span>Défilez : l&apos;humain rejoint l&apos;IA</span>
+              <span>Défilez : l&apos;humain rejoint l&apos;IA</span>
             </span>
             <span>{site.zoneLabel}</span>
           </div>
+        </div>
         </div>
       </section>
 
@@ -429,6 +465,9 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
                         <span key={t}>{t}</span>
                       ))}
                       <span className="work-links">
+                        <a href={`/projets/${p.slug}`} tabIndex={d === 0 ? undefined : -1}>
+                          Détails →
+                        </a>
                         {p.live && (
                           <a href={p.live} target="_blank" rel="noopener noreferrer" tabIndex={d === 0 ? undefined : -1}>
                             Voir le site ↗

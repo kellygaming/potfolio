@@ -52,3 +52,32 @@ export function featuredFrame(p: number, big: number, reduced = false) {
   const c = reduced ? 1 : easeOut(seg(p, 0.6, 0.94));
   return { scale: mix(big, 1, t), lift: 1 - t, carY: 1 - c, carO: c, subO: reduced ? 1 : seg(p, 0.8, 0.94) };
 }
+
+/**
+ * Les deux mains (humaine en haut à gauche, IA en bas à droite) se rapprochent au défilement.
+ * Le bout de chaque index est un point connu de l'image détourée (en fraction de sa largeur/hauteur) :
+ * on place chaque main pour que son index vise le point de rencontre M, l'écart diminuant avec p (0 → 1).
+ */
+export const HAND_TIPS = {
+  human: { x: 0.997, y: 0.847, ratio: 1011 / 1200 },
+  ai: { x: 0.002, y: 0.023, ratio: 1039 / 1200 },
+};
+
+export function handsFrame(p: number, w: number, h: number, reduced = false) {
+  const phone = w < 760;
+  const t = reduced ? 1 : easeInOut(clamp(p));
+  const hw = phone ? w * 0.62 : Math.min(w * 0.4, h * 0.74);
+  const M = { x: w * 0.5, y: h * (phone ? 0.34 : 0.37) };
+  // écart de départ (en diagonale) puis écart final : les doigts se frôlent sans se toucher
+  const dx = mix(phone ? w * 0.2 : w * 0.24, w * (phone ? 0.012 : 0.007), t);
+  const dy = mix(h * (phone ? 0.14 : 0.2), h * 0.004, t);
+  const hh = hw * HAND_TIPS.human.ratio;
+  const ah = hw * HAND_TIPS.ai.ratio;
+  return {
+    hw,
+    M,
+    human: { x: M.x - dx - HAND_TIPS.human.x * hw, y: M.y - dy - HAND_TIPS.human.y * hh },
+    ai: { x: M.x + dx - HAND_TIPS.ai.x * hw, y: M.y + dy - HAND_TIPS.ai.y * ah },
+    spark: seg(t, 0.55, 1),
+  };
+}

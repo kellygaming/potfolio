@@ -5,7 +5,7 @@ Direction artistique inspirée du template **Crimson Reach** (MIT, Kedhareswer N
 
 ## Parcours de la page
 
-1. **Hero** — carte rouge, deux mains qui se tendent (l'humain et la machine).
+1. **Hero épinglé** — au défilement, la main humaine et la main robot se rapprochent jusqu'à se frôler ; une étincelle s'allume entre les index (`handsFrame` dans `lib/motion.ts`).
 2. **Manifeste** — s'encre mot à mot ; dessous, **les noms des 4 projets phares défilent** (cliquables).
 3. **« Où en est votre projet ? »** — la dune se découpe en trois cartes qui se retournent.
 4. **Services** — Sites web, Applications IA, Vidéos publicitaires IA, Montage & motion design.
@@ -14,6 +14,17 @@ Direction artistique inspirée du template **Crimson Reach** (MIT, Kedhareswer N
 7. **Mon IA** — assistant DeepSeek en streaming (`/api/chat`).
 8. **Contact** — cartes, compteurs, fiche projet (`/api/contact` → Telegram, puis e-mail Resend).
 9. **Carte finale** — « Réinventons la vôtre ».
+
+## Pages projet
+
+Chaque projet a sa page statique `/projets/<slug>` (texte, points clés, « L'IA dans ce projet », outils, liens, projet suivant),
+générée depuis les champs `points`, `stack` et `ai` de `lib/site.ts`.
+
+## Images
+
+Tous les visuels de `public/crimson/` (fond du hero, mains détourées, dune, buste, services) ont été générés sur fal.ai
+(Nano Banana 2.1, détourage BiRefNet) : plus aucune image du template. Seule la structure du code reprend le template
+Crimson Reach (licence MIT, Kedhareswer Naidu).
 
 ## Modifier le contenu
 

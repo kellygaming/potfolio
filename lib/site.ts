@@ -97,6 +97,11 @@ export type Project = {
   image?: string;
   live?: string;
   repo?: string;
+  /** page détail /projets/<slug> */
+  points?: string[];
+  stack?: string[];
+  /** comment l'IA a servi dans ce projet */
+  ai?: string;
 };
 
 export const projects: Project[] = [
@@ -108,6 +113,13 @@ export const projects: Project[] = [
     tags: ["Site vitrine", "Vidéo IA au scroll", "GSAP"],
     live: "https://desby-fils.vercel.app",
     repo: "https://github.com/kellygaming/Desby-Fils",
+    points: [
+      "Accueil en scènes : une maison qui se démonte au défilement, des engins qui roulent avec la page",
+      "Présentation de l'entreprise, des services BTP et des lotissements de Songon et de la Baie des Milliardaires",
+      "Contact direct : WhatsApp, téléphones, formulaire et carte",
+    ],
+    stack: ["HTML / CSS / JS", "GSAP ScrollTrigger", "Lenis", "fal.ai"],
+    ai: "Les scènes animées sont des vidéos générées par IA sur fal.ai, découpées en séquences d'images que le défilement fait jouer image par image.",
   },
   {
     slug: "delta-securite",
@@ -116,6 +128,13 @@ export const projects: Project[] = [
     body: "Trois pages claires et un assistant IA qui connaît toute l'entreprise et répond aux clients en direct, 24h/24.",
     tags: ["Next.js", "Assistant IA", "Site corporate"],
     repo: "https://github.com/kellygaming/delta-securit-",
+    points: [
+      "Accueil, présentation de l'entreprise, contact et mentions légales",
+      "Toutes les informations de la société réunies dans un seul fichier, qui alimente le site et l'assistant",
+      "Assistant en ligne qui répond en direct, mot par mot",
+    ],
+    stack: ["Next.js", "TypeScript", "DeepSeek", "Vercel"],
+    ai: "L'assistant est branché sur l'API DeepSeek : il connaît les services, l'agrément et les contacts de Delta Sécurité, et répond aux visiteurs à toute heure.",
   },
   {
     slug: "ffmf",
@@ -133,6 +152,13 @@ export const projects: Project[] = [
     tags: ["Studio IA", "fal.ai", "Supabase"],
     live: "https://motion-ai.vercel.app",
     repo: "https://github.com/kellygaming/img-ai",
+    points: [
+      "Une description suffit : l'IA tourne une vidéo de 5 ou 10 secondes",
+      "Résolutions 480p, 768p et 1080p, six formats (16:9, 9:16, 1:1, 21:9, 4:3, 3:4)",
+      "Bibliothèque des 50 derniers projets, comptes sécurisés",
+    ],
+    stack: ["Next.js", "fal.ai", "MiniMax", "Supabase"],
+    ai: "La génération passe par le modèle vidéo MiniMax sur fal.ai, en file d'attente : on lance, on suit l'avancée, on récupère la vidéo.",
   },
 ];
 
