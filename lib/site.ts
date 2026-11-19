@@ -127,6 +127,7 @@ export const projects: Project[] = [
     title: "Site officiel d'une société de gardiennage agréée",
     body: "Trois pages claires et un assistant IA qui connaît toute l'entreprise et répond aux clients en direct, 24h/24.",
     tags: ["Next.js", "Assistant IA", "Site corporate"],
+    live: "https://delta-securit.vercel.app",
     repo: "https://github.com/kellygaming/delta-securit-",
     points: [
       "Accueil, présentation de l'entreprise, contact et mentions légales",
@@ -172,6 +173,7 @@ export const projects: Project[] = [
     title: "Boutique en ligne d'une marque de streetwear",
     body: "Une vitrine sombre et éditoriale pour la nouvelle collection « Man of God » : boutique, collection, matière, avis et commande directe.",
     tags: ["E-commerce", "Marque de mode", "Direction artistique"],
+    live: "https://man-of-god-three.vercel.app",
     points: [
       "Hero plein écran sur le produit phare, typographie de marque",
       "Parcours boutique, collection, matière, avis clients et commande",
@@ -200,7 +202,7 @@ export const testimonials: Testimonial[] = [
   { id: "desby", name: "Desby & Fils", role: "Client · Site vitrine BTP", quote: "", image: "/projets/desby-fils.webp", mark: "DESBY", pending: true },
   { id: "ffmf", name: "Free Fire MEA", role: "Client · Plateforme communautaire", quote: "", image: "/projets/ffmf.webp", mark: "FFMF", pending: true },
   { id: "aura", name: "Aura Brand", role: "Client · Boutique streetwear", quote: "", image: "/projets/aura.webp", mark: "AURA", pending: true },
-  { id: "delta", name: "Delta Sécurité", role: "Client · Site corporate", quote: "", image: "/crimson/svc-web.webp", mark: "DELTA", pending: true },
+  { id: "delta", name: "Delta Sécurité", role: "Client · Site corporate", quote: "", image: "/projets/delta-securite.webp", mark: "DELTA", pending: true },
 ];
 
 export const stats = [
