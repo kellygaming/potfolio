@@ -1,34 +1,31 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Instrument_Serif, Space_Grotesk } from "next/font/google";
+import { Inter, Instrument_Serif } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display", weight: ["500", "600", "700"] });
-const body = Inter({ subsets: ["latin"], variable: "--font-body" });
-const serif = Instrument_Serif({ subsets: ["latin"], variable: "--font-serif", weight: "400", style: ["italic"] });
+const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const serif = Instrument_Serif({ subsets: ["latin"], variable: "--font-serif", weight: "400", style: ["normal", "italic"] });
 
-const description = `${site.name} — ${site.role}, ${site.roleTail}. Sites web, vidéos publicitaires IA, montage et motion design.`;
+const description = `${site.name} — ${site.role}. Sites web, applications IA, vidéos publicitaires, montage et motion design.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: `${site.name} — ${site.role} · IA`,
+  title: `${site.name} — Sites web & vidéos publicitaires IA`,
   description,
   openGraph: {
-    title: `${site.name} — l'intelligence artificielle, maîtrisée`,
+    title: `${site.name} — là où une idée rencontre l'IA`,
     description,
     type: "website",
     locale: "fr_FR",
+    images: ["/crimson/hero.webp"],
   },
 };
 
-export const viewport: Viewport = { themeColor: "#070a12", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#000000", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${display.variable} ${body.variable} ${serif.variable}`} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
-      </head>
+    <html lang="fr" className={`${sans.variable} ${serif.variable}`}>
       <body>{children}</body>
     </html>
   );

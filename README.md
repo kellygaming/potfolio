@@ -1,40 +1,45 @@
-# Portfolio de Kelly — l'intelligence artificielle, maîtrisée
+# Portfolio de Kelly — là où une idée rencontre l'IA
 
-Créateur de sites web et de vidéos publicitaires — outils d'intelligence artificielle.
+Créateur de sites web et de vidéos publicitaires avec l'intelligence artificielle.
+Direction artistique inspirée du template **Crimson Reach** (MIT, Kedhareswer Naidu), réécrite en français.
 
 ## Parcours de la page
 
-1. **Hero** — film « Intelligence artificielle » (voix activable). En attendant le MP4
-   /motionbykelly, une version animée en code (réseau neuronal canvas + GSAP) joue la même phrase.
-2. **« Et je suis l'un des meilleurs »** — section épinglée : la phrase s'allume au défilement,
-   la photo de Kelly se pose, puis les maîtrises (Claude, ChatGPT, vidéo IA, montage).
-3. **L'IA de Kelly** — orbe animé + chat en direct, propulsé par DeepSeek (réponses en streaming).
-4. **Projets** — TubAfrik, Sub Saharan Bio, Studio Voix, avec captures réelles des pages d'accueil.
-5. **Présentation** — « Fan d'IA, je m'en suis inspiré… je suis prêt pour votre projet ».
-6. **Fiche projet** — formulaire envoyé par e-mail (Resend).
+1. **Hero** — carte rouge, deux mains qui se tendent (l'humain et la machine).
+2. **Manifeste** — s'encre mot à mot ; dessous, **les noms des 4 projets phares défilent** (cliquables).
+3. **« Où en est votre projet ? »** — la dune se découpe en trois cartes qui se retournent.
+4. **Services** — Sites web, Applications IA, Vidéos publicitaires IA, Montage & motion design.
+5. **Projets phares** — grand titre qui rétrécit sur le carrousel (Desby & Fils, Delta Sécurité, FFMF, Motion.ai).
+6. **Mur d'outils IA** — Claude, ChatGPT, fal.ai, ElevenLabs…
+7. **Mon IA** — assistant DeepSeek en streaming (`/api/chat`).
+8. **Contact** — cartes, compteurs, fiche projet (`/api/contact` → Telegram, puis e-mail Resend).
+9. **Carte finale** — « Réinventons la vôtre ».
+
+## Modifier le contenu
+
+Tout est dans `lib/site.ts` : textes, services, projets, outils, compteurs, prompt de l'assistant.
+
+## Images des projets
+
+Déposer une capture par projet (16:9, ≥ 1200 px, l'en-tête du site en haut) :
+
+| Fichier | Projet |
+|---|---|
+| `public/projets/desby-fils.webp` | Desby & Fils |
+| `public/projets/delta-securite.webp` | Delta Sécurité |
+| `public/projets/ffmf.webp` | FFMF |
+| `public/projets/motion-ai.webp` | Motion.ai |
+
+`.jpg` et `.png` marchent aussi. Sans fichier, une carte typographique rouge s'affiche — aucune ligne de code à toucher.
 
 ## Stack
 
-Next.js 16 (App Router) · TypeScript · GSAP ScrollTrigger · Lenis · CSS natif (jetons dans `app/globals.css`).
-Contenu centralisé dans `lib/site.ts`.
+Next.js 16 (App Router) · TypeScript · CSS natif (`app/globals.css`) · chorégraphie au défilement en `requestAnimationFrame` (`lib/motion.ts`).
 
 ## Démarrer
 
 ```bash
 npm install
-cp .env.example .env.local   # DEEPSEEK_API_KEY, RESEND_API_KEY, CONTACT_TO_EMAIL
+cp .env.example .env.local   # DEEPSEEK_API_KEY, TELEGRAM_ALERT_TOKEN, TELEGRAM_ALERT_CHAT_ID…
 npm run dev
 ```
-
-## À fournir
-
-| Fichier | Rôle |
-|---|---|
-| `public/images/kelly.jpg` | Portrait (format 4:5, ≥ 900 px de large). Sans lui, un monogramme s'affiche. |
-| `public/audio/hero-voix.mp3` | Voix off du hero (sinon la voix du navigateur prend le relais). |
-| `public/videos/hero.mp4` | Film /motionbykelly (voir `docs/film-hero/SCRIPT.md`). |
-
-## Déploiement Vercel
-
-Importer le dépôt, puis ajouter les variables `DEEPSEEK_API_KEY`, `RESEND_API_KEY`,
-`CONTACT_TO_EMAIL` (et `CONTACT_FROM_EMAIL` une fois un domaine vérifié sur Resend).

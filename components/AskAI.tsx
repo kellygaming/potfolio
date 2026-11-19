@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const SUGGESTIONS = ["Que sait faire Kelly ?", "C'est quoi une pub vidéo IA ?", "Combien de temps pour un site ?"];
+const SUGGESTIONS = ["Que sait faire Kelly ?", "C'est quoi une pub vidéo IA ?", "Parle-moi de Motion.ai"];
 
-/** Assistant IA plein écran : un grand cadre, « Bonjour utilisateur », la conversation au centre, la saisie en bas. */
-export default function Assistant() {
+/** L'IA de Kelly : une carte sombre, la conversation en streaming (DeepSeek via /api/chat). */
+export default function AskAI() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -30,7 +30,6 @@ export default function Assistant() {
     const history: Msg[] = [...messages, { role: "user", content: q }];
     setMessages([...history, { role: "assistant", content: "" }]);
     setBusy(true);
-
     abort.current = new AbortController();
     try {
       const res = await fetch("/api/chat", {
@@ -52,7 +51,7 @@ export default function Assistant() {
         answer += decoder.decode(value, { stream: true });
         setMessages([...history, { role: "assistant", content: answer }]);
       }
-      if (!answer) throw new Error("Réponse vide, réessaie.");
+      if (!answer) throw new Error("Réponse vide, réessayez.");
     } catch (e) {
       if ((e as Error).name === "AbortError") return;
       setMessages(history);
@@ -63,38 +62,42 @@ export default function Assistant() {
     }
   };
 
-  const started = messages.length > 0;
   const last = messages.at(-1);
   const waiting = busy && last?.role === "assistant" && !last.content;
 
   return (
-    <section className="assistant" id="ia" aria-labelledby="ia-title">
-      <div className="ia-frame" data-started={started}>
-        <span className="ia-by" aria-hidden>
-          By Kelly
-        </span>
-        <span className="ia-status" aria-hidden>
-          <i data-busy={busy} /> {busy ? "réfléchit…" : "en ligne · DeepSeek"}
-        </span>
+    <section className="ask" id="ia" aria-labelledby="ia-title">
+      <header className="head">
+        <h2 className="h2 h2-lg" id="ia-title">
+          Posez la question <em>à mon</em> IA
+        </h2>
+        <p>Je l&apos;ai créée pour vous répondre, même quand je dors</p>
+      </header>
 
-        <header className="ia-hello">
-          <h2 id="ia-title">Bonjour utilisateur</h2>
-          <p>J&apos;ai été créé par Kelly.</p>
-          <p>Pose-moi tes questions.</p>
-        </header>
+      <div className="ask-card">
+        <div className="ask-top">
+          <span className="ask-dot" data-busy={busy} />
+          <span>{busy ? "réfléchit…" : "IA de Kelly · en ligne"}</span>
+        </div>
 
-        <div className="ia-log" ref={log} aria-live="polite">
+        <div className="ask-log" ref={log} aria-live="polite">
+          {messages.length === 0 && (
+            <p className="ask-hello">
+              Bonjour&nbsp;! Je suis l&apos;assistant de Kelly. Demandez-moi ce qu&apos;il sait faire, ses projets, ou comment l&apos;IA
+              peut servir votre entreprise.
+            </p>
+          )}
           {messages.map((m, i) =>
             m.role === "assistant" && !m.content ? null : (
-              <div key={i} className={`ia-msg ia-${m.role}`}>
-                <span className="ia-who">{m.role === "user" ? "Toi" : "IA de Kelly"}</span>
+              <div key={i} className={`ask-msg is-${m.role}`}>
+                <span>{m.role === "user" ? "Vous" : "IA de Kelly"}</span>
                 <p>{m.content}</p>
               </div>
             ),
           )}
           {waiting && (
-            <div className="ia-msg ia-assistant" aria-label="L'IA écrit">
-              <span className="ia-who">IA de Kelly</span>
+            <div className="ask-msg is-assistant" aria-label="L'IA écrit">
+              <span>IA de Kelly</span>
               <span className="typing">
                 <i />
                 <i />
@@ -102,11 +105,11 @@ export default function Assistant() {
               </span>
             </div>
           )}
-          {error && <p className="ia-err">{error}</p>}
+          {error && <p className="ask-err">{error}</p>}
         </div>
 
-        {!started && (
-          <div className="ia-suggest">
+        {messages.length === 0 && (
+          <div className="ask-suggest">
             {SUGGESTIONS.map((s) => (
               <button key={s} type="button" onClick={() => send(s)}>
                 {s}
@@ -116,29 +119,26 @@ export default function Assistant() {
         )}
 
         <form
-          className="ia-input"
+          className="ask-input"
           onSubmit={(e) => {
             e.preventDefault();
             send(input);
           }}
         >
           <label htmlFor="ia-field" className="sr-only">
-            Ta question
+            Votre question
           </label>
-          <span className="ia-caret" aria-hidden />
           <input
             id="ia-field"
             ref={field}
             autoComplete="off"
             maxLength={1200}
-            placeholder="Écris ta question ici…"
+            placeholder="Écrivez votre question…"
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
           <button type="submit" disabled={busy || !input.trim()} aria-label="Envoyer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
+            →
           </button>
         </form>
       </div>

@@ -1,39 +1,22 @@
-import About from "@/components/About";
-import AdShowcase from "@/components/AdShowcase";
-import Assistant from "@/components/Assistant";
-import Claim from "@/components/Claim";
-import Contact from "@/components/Contact";
-import Hero from "@/components/Hero";
-import Motion from "@/components/Motion";
-import Nav from "@/components/Nav";
-import Projects from "@/components/Projects";
-import { site } from "@/lib/site";
+import { existsSync } from "node:fs";
+import path from "node:path";
+import Portfolio from "@/components/Portfolio";
+import { projects } from "@/lib/site";
+
+// Dépose public/projets/<slug>.webp (ou .jpg / .png) : la capture remplace automatiquement la carte typographique.
+function withShots() {
+  const dir = path.join(process.cwd(), "public", "projets");
+  return projects.map((p) => {
+    if (p.image) return p;
+    const ext = ["webp", "jpg", "png"].find((e) => existsSync(path.join(dir, `${p.slug}.${e}`)));
+    return ext ? { ...p, image: `/projets/${p.slug}.${ext}` } : p;
+  });
+}
 
 export default function Home() {
   return (
-    <>
-      <Motion />
-      <div className="grain" aria-hidden />
-      <Nav />
-      <main>
-        <Hero />
-        <Claim />
-        <Assistant />
-        <Projects />
-        <AdShowcase />
-        <About />
-        <Contact />
-      </main>
-      <footer className="footer">
-        <div className="wrap">
-          <span>
-            © {new Date().getFullYear()} {site.name} — {site.role}
-          </span>
-          <a href={site.github} target="_blank" rel="noopener noreferrer">
-            GitHub ↗
-          </a>
-        </div>
-      </footer>
-    </>
+    <main>
+      <Portfolio projects={withShots()} />
+    </main>
   );
 }
